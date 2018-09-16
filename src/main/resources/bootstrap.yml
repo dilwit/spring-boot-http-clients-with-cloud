@@ -1,13 +1,13 @@
 spring:
     application:
-        name: feign-client-with-hystrix
+        name: http-clients-with-cloud
     profiles:
         active: dev
 
 eureka:
     client:
         # No need to register client with eureka as this is only a client. Not acting as a micro service.
-        # registerWithEureka: true
+        registerWithEureka: false
         fetchRegistry: true
         serviceUrl:
             defaultZone: ${EUREKA_URI:http://eureka:123456789@localhost:8761/eureka/}
