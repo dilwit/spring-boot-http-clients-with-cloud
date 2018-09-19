@@ -13,7 +13,6 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 @EnableEurekaClient
 @EnableFeignClients
-@EnableCircuitBreaker
 public class HttpClientsWithCloudApplication {
 
 	@Autowired

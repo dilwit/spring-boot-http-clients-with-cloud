@@ -7,15 +7,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
 @Component
-public class EurekaAwareRestClientLoadBalanced extends AbstractEurekaAwareRestClient {
+public class EurekaAwareRestTemplateClientLoadBalanced extends AbstractEurekaAwareRestClient {
 
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 
     public String greeting() {
 
-        ServiceInstance serviceInstance = loadBalancerClient.choose("EUREKA-AWARE-CLIENT");
+        // Let load balancer to pick the service
+        ServiceInstance serviceInstance = loadBalancerClient.choose(EUREKA_AWARE_CLIENT_SERVICE_ID);
         String result = restTemplate.exchange(serviceInstance.getUri() + "/greeting", HttpMethod.GET, null, String.class).getBody();
+
         return result;
     }
 }

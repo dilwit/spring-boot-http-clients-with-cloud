@@ -1,4 +1,4 @@
-package net.dilwit.spring.httpClientsWithCloud.feign.internal;
+package net.dilwit.spring.httpClientsWithCloud.feign.serviceDiscoveryAware;
 
 import org.springframework.stereotype.Component;
 

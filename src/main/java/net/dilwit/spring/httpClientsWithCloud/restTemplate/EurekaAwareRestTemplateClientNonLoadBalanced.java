@@ -20,7 +20,7 @@ public class EurekaAwareRestTemplateClientNonLoadBalanced extends AbstractEureka
     private DiscoveryClient discoveryClient;
 
     public String greeting() {
-        List<ServiceInstance> instances = discoveryClient.getInstances("EUREKA-AWARE-CLIENT");
+        List<ServiceInstance> instances = discoveryClient.getInstances(EUREKA_AWARE_CLIENT_SERVICE_ID);
 
         if(instances.size() <= 0)
             throw new RuntimeException("Not able to fetch registry from eureka server. " +

@@ -9,6 +9,8 @@ import java.nio.charset.Charset;
 
 public class AbstractEurekaAwareRestClient {
 
+    protected static final String EUREKA_AWARE_CLIENT_SERVICE_ID = "EUREKA-AWARE-CLIENT";
+
     @Autowired
     protected RestTemplate restTemplate;
 
