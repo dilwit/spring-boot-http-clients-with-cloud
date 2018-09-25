@@ -1,0 +1,7 @@
+# Settings for ribbon - Scenario 0 - Ref Method for pre-requisites and instructions
+
+# Feign is declarative rest client
+feign:
+  # Hystrix provides circuit breaker capabilities
+  hystrix:
+    enabled: false

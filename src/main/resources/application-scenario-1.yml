@@ -1,0 +1,17 @@
+# Settings for ribbon - Scenario 1 - Ref Method for pre-requisites and instructions
+
+ribbon:
+  eureka:
+    enabled: true
+  MaxAutoRetries: 0 # Max number of retries on the same server (excluding the first try)
+  MaxAutoRetriesNextServer: 0 # Max number of next servers to retry (excluding the first server)
+  OkToRetryOnAllOperations: true # Whether all operations can be retried for this client
+  ServerListRefreshInterval: 2000 # Interval to refresh the server list from the source
+  ReadTimeout: 10000 # Connect timeout used by Apache HttpClient
+  ConnectTimeout: 10000 # Read timeout used by Apache HttpClient
+
+# Feign is declarative rest client
+feign:
+  # Hystrix provides circuit breaker capabilities
+  hystrix:
+    enabled: false

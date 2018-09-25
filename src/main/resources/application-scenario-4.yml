@@ -1,0 +1,20 @@
+# Settings for ribbon/ hystrix - Scenario 4 - Ref Method for pre-requisites and instructions
+
+ribbon:
+  eureka:
+    enabled: true
+  MaxAutoRetries: 3 # Max number of retries on the same server (excluding the first try)
+  MaxAutoRetriesNextServer: 1 # Max number of next servers to retry (excluding the first server)
+  OkToRetryOnAllOperations: true # Whether all operations can be retried for this client
+  ServerListRefreshInterval: 2000 # Interval to refresh the server list from the source
+  ReadTimeout: 2000 # Connect timeout used by Apache HttpClient
+  ConnectTimeout: 2000 # Read timeout used by Apache HttpClient
+
+# Hystrix enabled
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000 # Timeout - this is greater than the ribbon timeout, hence hystrix will timeout first

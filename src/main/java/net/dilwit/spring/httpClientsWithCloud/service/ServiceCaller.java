@@ -2,6 +2,7 @@ package net.dilwit.spring.httpClientsWithCloud.service;
 
 import net.dilwit.spring.httpClientsWithCloud.feign.external.CurrencyFeignClient;
 import net.dilwit.spring.httpClientsWithCloud.feign.serviceDiscoveryAware.EurekaAwareFeignClient;
+import net.dilwit.spring.httpClientsWithCloud.feign.serviceDiscoveryAwareAndHystrix.EurekaAwareFeignClientWithHystrix;
 import net.dilwit.spring.httpClientsWithCloud.restTemplate.EurekaAwareRestTemplateClientNonLoadBalanced;
 import net.dilwit.spring.httpClientsWithCloud.restTemplate.EurekaAwareRestTemplateClientLoadBalanced;
 import org.slf4j.Logger;
@@ -18,6 +19,9 @@ public class ServiceCaller {
 
     @Autowired
     EurekaAwareFeignClient eurekaAwareFeignClient;
+
+    @Autowired
+    EurekaAwareFeignClientWithHystrix eurekaAwareFeignClientWithHystrix;
 
     @Autowired
     CurrencyFeignClient currencyFeignClient;
@@ -39,15 +43,14 @@ public class ServiceCaller {
      * - one of them should run with execution delay which is greater than ribbon readTimeOut
      *
      * Scenario explained:
-     * - each iteration will have 50/50 chance in hitting highly responsive service and debug-blocked service
+     * - each iteration will have 50/50 chance in hitting highly responsive service and delayed service
      * - iterations which hit the service with execution delay will not retry with other available service instances
      */
-    public void invokeLoadBalancedFiegnClientScenario_1() {
+    public void invokeLoadBalancedFiegnClient_Scenario_1() {
 
         for(int i = 0; i < 10; i++) {
             String greeting = eurekaAwareFeignClient.greeting();
-            if (greeting.equalsIgnoreCase(EXPECTED_GREETING_FROM_EUREKA_AWARE_CLIENT))
-                LOGGER.info("Scenario 1 - Iteration: " + i + " Service returned: " + greeting);
+            LOGGER.info("Scenario 1 - Iteration: " + i + " Service returned: " + greeting);
         }
     }
 
@@ -58,14 +61,49 @@ public class ServiceCaller {
      *
      * Scenario explained:
      * - any iteration which hit the service with execution delay will time-out and try next available service
-     * - hence, each iteration will hit highly responsive service
+     * - hence, each iteration will hit responsive service
      */
-    public void invokeLoadBalancedFiegnClientScenario_2() {
+    public void invokeLoadBalancedFiegnClient_Scenario_2() {
 
         for(int i = 0; i < 10; i++) {
             String greeting = eurekaAwareFeignClient.greeting();
-            if (greeting.equalsIgnoreCase(EXPECTED_GREETING_FROM_EUREKA_AWARE_CLIENT))
-                LOGGER.info("Scenario 2 - Iteration: " + i + " Service returned: " + greeting);
+            LOGGER.info("Scenario 2 - Iteration: " + i + " Service returned: " + greeting);
+        }
+    }
+
+
+    /**
+     * Pre-requisites:
+     * - two instances of eurekaAware client should run
+     * - one of them should run with execution delay which is greater than hystrix readTimeOut
+     * - hystrix enabled
+     *
+     * Scenario explained:
+     * - when hystrix timeout occurred, hystrix will return fallback response
+     * - and then cut-off delayed instance from available server list for ribbon
+     */
+    public void invokeLoadBalancedFiegnClientWithHystrix_Scenario_3() {
+
+        for(int i = 0; i < 10; i++) {
+            String greeting = eurekaAwareFeignClientWithHystrix.greeting();
+            LOGGER.info("Scenario 3 - Iteration: " + i + " Service returned: " + greeting);
+        }
+    }
+
+    /**
+     * Pre-requisites:
+     * - two instances of eurekaAware client should run
+     * - one of them should run with execution delay which is greater than hystrix readTimeOut
+     * - hystrix enabled
+     *
+     * Scenario explained:
+     * - when hystrix timeout occurred, hystrix will return fallback response
+     * - and then cut-off delayed instance from available server list for ribbon
+     */
+    public void invokeLoadBalancedFiegnClientWithHystrix_Scenario_4() {
+        for(int i = 0; i < 10; i++) {
+            String greeting = eurekaAwareFeignClientWithHystrix.greeting();
+            LOGGER.info("Scenario 4 - Iteration: " + i + " Service returned: " + greeting);
         }
     }
 
@@ -86,5 +124,4 @@ public class ServiceCaller {
         if(!eurekaAwareFeignClient.greeting().equalsIgnoreCase(EXPECTED_GREETING_FROM_EUREKA_AWARE_CLIENT))
             throw new RuntimeException("Error invoking eureka aware service via feign client");
     }
-
 }
