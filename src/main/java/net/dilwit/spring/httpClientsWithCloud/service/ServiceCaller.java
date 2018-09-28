@@ -49,7 +49,7 @@ public class ServiceCaller {
     public void invokeLoadBalancedFiegnClient_Scenario_1() {
 
         for(int i = 0; i < 10; i++) {
-            String greeting = eurekaAwareFeignClient.greeting();
+            String greeting = eurekaAwareFeignClient.greeting("request: " + i);
             LOGGER.info("Scenario 1 - Iteration: " + i + " Service returned: " + greeting);
         }
     }
@@ -66,7 +66,7 @@ public class ServiceCaller {
     public void invokeLoadBalancedFiegnClient_Scenario_2() {
 
         for(int i = 0; i < 10; i++) {
-            String greeting = eurekaAwareFeignClient.greeting();
+            String greeting = eurekaAwareFeignClient.greeting("request: " + i);
             LOGGER.info("Scenario 2 - Iteration: " + i + " Service returned: " + greeting);
         }
     }
@@ -84,8 +84,8 @@ public class ServiceCaller {
      */
     public void invokeLoadBalancedFiegnClientWithHystrix_Scenario_3() {
 
-        for(int i = 0; i < 10; i++) {
-            String greeting = eurekaAwareFeignClientWithHystrix.greeting();
+        for(int i = 0; i < 20; i++) {
+            String greeting = eurekaAwareFeignClientWithHystrix.greeting("request: " + i);
             LOGGER.info("Scenario 3 - Iteration: " + i + " Service returned: " + greeting);
         }
     }
@@ -102,7 +102,7 @@ public class ServiceCaller {
      */
     public void invokeLoadBalancedFiegnClientWithHystrix_Scenario_4() {
         for(int i = 0; i < 10; i++) {
-            String greeting = eurekaAwareFeignClientWithHystrix.greeting();
+            String greeting = eurekaAwareFeignClientWithHystrix.greeting("request: " + i);
             LOGGER.info("Scenario 4 - Iteration: " + i + " Service returned: " + greeting);
         }
     }
@@ -121,7 +121,7 @@ public class ServiceCaller {
         if(!currencyFeignClient.getCurrencies().contains("currencyName"))
             throw new RuntimeException("Error invoking external service via feign client");
 
-        if(!eurekaAwareFeignClient.greeting().equalsIgnoreCase(EXPECTED_GREETING_FROM_EUREKA_AWARE_CLIENT))
+        if(!eurekaAwareFeignClient.greeting("request").equalsIgnoreCase(EXPECTED_GREETING_FROM_EUREKA_AWARE_CLIENT))
             throw new RuntimeException("Error invoking eureka aware service via feign client");
     }
 }

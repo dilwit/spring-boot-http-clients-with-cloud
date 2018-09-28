@@ -1,12 +1,22 @@
 package net.dilwit.spring.httpClientsWithCloud.feign.serviceDiscoveryAwareAndHystrix;
 
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component
 public class EurekaAwareFeignClientWithHystrixFallBack implements EurekaAwareFeignClientWithHystrix {
 
-    @Override
-    public String greeting() {
-        return "Fallen back to empty greeting...";
+    private static final Logger LOGGER = LoggerFactory.getLogger(EurekaAwareFeignClientWithHystrixFallBack.class);
+
+    private Throwable cause;
+
+    public EurekaAwareFeignClientWithHystrixFallBack(Throwable cause) {
+        this.cause = cause;
     }
+
+    @Override
+    public String greeting(String from) {
+        LOGGER.info(cause.toString());
+        return "Fallen back to empty greeting... as no greeting for " + from;
+    }
+
 }

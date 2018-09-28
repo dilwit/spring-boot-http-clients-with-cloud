@@ -10,11 +10,25 @@ ribbon:
   ReadTimeout: 10000 # Connect timeout used by Apache HttpClient
   ConnectTimeout: 10000 # Read timeout used by Apache HttpClient
 
-# Hystrix enabled
-hystrix:
-  command:
-    default:
-      execution:
-        isolation:
-          thread:
-            timeoutInMilliseconds: 5000 # Timeout - this is less than the ribbon timeout, hence hystrix will timeout first
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        timeout:
+#          enabled: false # hystrix will use timeout set in ribbon
+
+#hystrix:
+#  command:
+#  simple-client:
+#    execution:
+#      isolation:
+#        thread:
+#          timeoutInMilliseconds: 11000
+
+## Feign is declarative rest client
+#feign:
+#  # Hystrix provides circuit breaker capabilities
+#  hystrix:
+#    enabled: true
+
+hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds: 11000
